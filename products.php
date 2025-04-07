@@ -23,7 +23,7 @@ $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
     while ($data = mysqli_fetch_array($result)) {
         $transaction_id = uniqid('tran_');
-        // Construct the payment URL with query parameters
+        // Use a placeholder link until the correct one is provided
         $payment_url = "https://pay.ababank.com/efRPcMcXvMLRihKq6?" . http_build_query([
             'tran_id' => $transaction_id,
             'amount' => $data['price'],
@@ -38,7 +38,11 @@ if (mysqli_num_rows($result) > 0) {
                 <div class="card-body">
                     <h4 class="card-title"><?php echo htmlspecialchars($data['name']); ?></h4>
                     <p class="card-text">$<?php echo number_format($data['price'], 2); ?></p>
-                    <a href="<?php echo $payment_url; ?>" class="btn btn-primary">Buy Now</a>
+                    <?php if ($payment_url === "#") { ?>
+                        <p class="text-danger">Payment link is currently unavailable. Please contact support.</p>
+                    <?php } else { ?>
+                        <a href="<?php echo $payment_url; ?>" class="btn btn-primary">Buy Now</a>
+                    <?php } ?>
                 </div>
             </div>
         </div>
